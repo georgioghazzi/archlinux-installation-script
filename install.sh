@@ -89,49 +89,33 @@ done
 echo $TGTDEV'1'
 
 
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk ${TGTDEV}
-  o # clear the in memory partition table
-  n # new partition
-  p # primary partition
-  1 # partition number 1
-    # default - start at beginning of disk 
-  +512M # 512 MB boot parttion
-  n # new partition
-  p # primary partition
-  2 # partion number 2
-    # default, start immediately after preceding partition
-  +8G # 8 GB root parttion
-  n # new partition
-  p # primary partition
-  3 # partion number 3
-    # default, start immediately after preceding partition
-    # default, extend partition to end of disk
-  a # make a partition bootable
-  1 # bootable partition is partition 1 -- /dev/sda1
-  p # print the in-memory partition table
-  w # write the partition table
-  q # and we're done
-EOF
+
+
+
+### Create Partition
+sgdisk -Z $TGTDEV
+sgdisk -n 0::+1GiB -t 0:ef00 -c 0:boot $TGTDEV
+sgdisk -n 0:: -t 0:8300 -c 0:root $TGTDEV
+
 
 
 ### Format Partitions
-mkfs.fat -F32 $TGTDEV'1'
+mkfs.vfat $TGTDEV'1'
 mkfs.ext4 $TGTDEV'2'
-mkfs.ext4 $TGTDEV'3'
 
 ### Mount Partition
 mount $TGTDEV'2' /mnt
-mkdir /mnt/home
-mount $TGTDEV'3' /mnt/home
-mkdir /mnt/boot/efi
-mount $TGTDEV'1' /mnt/boot/efi
+mkdir /mnt/boot /mnt/home
+mount $TGTDEV'1' /mnt/boot/
+mount $TGTDEV'2' /mnt/home
 
 ### Starting Install
-pacstrap /mnt base linux linux-firmware nano 
+pacstrap -i /mnt base base-devel linux linux-firmware bash man-db nano 
 
 
 ### Generating fstab
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U -p /mnt >> /mnt/etc/fstab
+
 
 cp -rvf post-install.sh /mnt
 chmod a+x /mnt/post-install.sh
@@ -140,5 +124,5 @@ echo "Please Run post-install.sh after chrooting to /mnt"
 echo "Press any key to continue"
 read temp
 ### Switching to mnt 
-arch-chroot /mnt /bin/bash
+arch-chroot /mnt /bin/bash -c `drive=$TGTDEV`
  
