@@ -10,7 +10,7 @@ echo ""
 
 ### Get Drive Name
 drive=$(lsblk --raw -o name,mountpoint | grep '/home')
-drive=$($echo "${drive}")
+drive=($(echo "${drive}"));
 
 ### use Beirut as Localtime
 ln -sf /usr/share/zoneinfo/Asia/Beirut /etc/localtime
