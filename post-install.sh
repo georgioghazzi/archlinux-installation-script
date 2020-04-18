@@ -8,6 +8,9 @@ echo "Georgio Ghazzi's Arch Configuration."
 echo "---------------------------------------"
 echo ""
 
+### Get Drive Name
+drive=$(lsblk --raw -o name,mountpoint | grep '/home')
+drive=$($echo "${drive}")
 
 ### use Beirut as Localtime
 ln -sf /usr/share/zoneinfo/Asia/Beirut /etc/localtime
@@ -53,7 +56,12 @@ exec 3<> /boot/loader/entries/arch.conf
     echo "linux /vmlinuz-linux" >&3
     echo "initrd /initramfs-linux.img" >&3
 exec 3>&-
-echo "options root=PARTUUID=$(blkid -s PARTUUID -o value "
+echo "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/$drive) rw" >> /boot/loader/entries/arch.conf
+
+### Install Graphical Intercafe
+pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock xterm i3-gaps i3status i3blocks lightdm lightm-gtk-greeter light-dm-gtk-greeter-settings --noconfirm
+
+systemctl enable lightdm
 
 
 ### Enable NetworkManager

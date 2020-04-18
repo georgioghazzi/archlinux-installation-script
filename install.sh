@@ -4,6 +4,7 @@
 # Georgio Ghazzi's  EFI Arch Installation Script
 
 
+
 echo "Georgio Ghazzi's EFI Arch Installation."
 echo "---------------------------------------"
 echo ""
@@ -33,7 +34,7 @@ done
 
 ### Set NTP On
 
-# timedatectl set-ntp true
+timedatectl set-ntp true
 
 
 
@@ -62,7 +63,36 @@ createmenu "${drives[@]}"
 drive=($(echo "${selected_option}"));
 }
 
-#Use Select Drive Function
+caution(){
+echo -e "\e[31mCaution This Will format [$TGTDEV] and create the following:\e[0m"
+echo    "------------------------------------------------------------"
+echo ""
+echo "boot partition : [$TGTDEV'1'] 1GiB EFI"
+echo "root partition : [$TGTDEV'1'] 1GiB s"
+
+
+while true
+do
+
+    read -p 'Do you confirm that ?[y/N]: ' cautionConf
+ 
+ case $cautionConf in
+     [yY][eE][sS]|[yY])
+     TGTDEV=/dev/${drive[0]}
+ break
+ ;;
+     [nN][oO]|[nN])
+ echo "Please Select a drive!"
+ selectDrive
+        ;;
+     *)
+ echo "Invalid input..."
+ ;;
+ esac
+done
+}
+
+### Use Select Drive Function
 selectDrive
 
 while true
@@ -74,10 +104,11 @@ echo "you have selected the following drive [/dev/${drive[0]}]"
  case $driveConf in
      [yY][eE][sS]|[yY])
      TGTDEV=/dev/${drive[0]}
+     caution
  break
  ;;
      [nN][oO]|[nN])
- echo "Please Select the a drive!"
+ echo "Please Select a drive!"
  selectDrive
         ;;
      *)
@@ -85,10 +116,6 @@ echo "you have selected the following drive [/dev/${drive[0]}]"
  ;;
  esac
 done
-
-echo $TGTDEV'1'
-
-
 
 
 
@@ -110,7 +137,7 @@ mount $TGTDEV'1' /mnt/boot/
 mount $TGTDEV'2' /mnt/home
 
 ### Starting Install
-pacstrap -i /mnt base base-devel linux linux-firmware bash man-db nano 
+yes '' | pacstrap -i /mnt base base-devel linux linux-firmware bash man-db nano 
 
 
 ### Generating fstab
@@ -124,5 +151,5 @@ echo "Please Run post-install.sh after chrooting to /mnt"
 echo "Press any key to continue"
 read temp
 ### Switching to mnt 
-arch-chroot /mnt /bin/bash -c `drive=$TGTDEV`
+arch-chroot /mnt /bin/bash 
  
