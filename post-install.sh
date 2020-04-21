@@ -40,9 +40,13 @@ pacman -Syy
 pacman -S networkmanager efibootmgr --noconfirm
 
 
+read -p 'Please Enter the desired username: ' userName
+
+
 
 ### User Add
-useradd -m -g users -G wheel,storage,power  -s /bin/bash georgioghazzi
+useradd -m -g users -G wheel,storage,power  -s /bin/bash $userName
+echo "Please input a password for $userName"
 passwd georgioghazzi
 
 ### Allow Sudo
@@ -66,7 +70,7 @@ pacman -S arandr android-tools bash-completion rofi code cowsay cowfortune croni
 systemctl enable NetworkManager
 
 
-
+echo "Please input a password for root user"
 passwd 
 
 echo "Please reboot and run  /configration.sh"
