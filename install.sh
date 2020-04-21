@@ -124,6 +124,8 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 
 cp -rvf post-install.sh /mnt
 chmod a+x /mnt/post-install.sh
+cp -rvf configuration.sh /mnt
+chmod a+x /mnt/configuration.sh
 
 echo "Please Run post-install.sh after chrooting to /mnt"
 echo "Press any key to continue"
