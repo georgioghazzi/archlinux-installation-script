@@ -69,6 +69,7 @@ systemctl enable NetworkManager
 
 passwd 
 
-echo "Please Run configration.sh"
+echo "Please reboot and run  /configration.sh"
 echo "Press any key to continue"
 read temp
+

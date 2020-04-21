@@ -22,11 +22,24 @@ cd yay
 makepkg -si
 
 ### Install AUR Package
-yay -S anydesk-bin betterlockscreen cheat chromedriver cli-visualizer fkill franz google-chrome howdoi mopidy-mpd mopidy-spotify package-query polybar rofi-emoji rofi-greenclip simple-mtpfs tty-font-awesome-4 tty-clock-borderless
+yay -S thefuck anydesk-bin betterlockscreen cheat chromedriver cli-visualizer fkill franz google-chrome howdoi mopidy-mpd mopidy-spotify package-query polybar rofi-emoji rofi-greenclip simple-mtpfs tty-font-awesome-4 tty-clock-borderless
 
 
 ### Install yadm
 yay -S yadm
 yadm clone https://github.com/georgioghazzi/.dotfiles
 
+
+
+### Delete Files.
+echo "Deleting the installation files."
+rm /configuration.sh
+rm /post-install.sh
+
+
+### Reboot 
+echo "Press any key to reboot"
+read tmp
+
+reboot
 
