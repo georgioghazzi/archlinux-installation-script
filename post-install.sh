@@ -37,7 +37,7 @@ sed -i '/^Color.*/i ILoveCandy' /etc/pacman.conf
 pacman -Syy
 
 ### Install NetworkManager Grub and efiBootMgr Sudo
-pacman -S networkmanager grub efibootmgr sudo bash-completion --noconfirm
+pacman -S networkmanager efibootmgr sudo --noconfirm
 
 
 
@@ -59,9 +59,7 @@ exec 3>&-
 echo "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/$drive) rw" >> /boot/loader/entries/arch.conf
 
 ### Install Graphical Intercafe
-pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock xterm i3-gaps i3status i3blocks lightdm lightm-gtk-greeter light-dm-gtk-greeter-settings --noconfirm
-
-systemctl enable lightdm
+pacman -S arandr android-tools base base-devel bash-completion cheat code cowsay cowfortune cronie dialog discord dunst feh firefox git htop i3-gaps i3blocks i3status linux linux-firmware linux-headers mopidy mpc mpd nano ncmpcpp xorg-apps xorg-server  --noconfirm
 
 
 ### Enable NetworkManager

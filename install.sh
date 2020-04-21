@@ -34,7 +34,7 @@ done
 
 ### Set NTP On
 
-timedatectl set-ntp true
+# timedatectl set-ntp true
 
 
 
@@ -63,48 +63,26 @@ createmenu "${drives[@]}"
 drive=($(echo "${selected_option}"));
 }
 
-caution(){
-echo -e "\e[31mCaution This Will format [$TGTDEV] and create the following:\e[0m"
-echo    "------------------------------------------------------------"
-echo ""
-echo "boot partition : [$TGTDEV'1'] 1GiB EFI"
-echo "root partition : [$TGTDEV'1'] 1GiB s"
-
-
-while true
-do
-
-    read -p 'Do you confirm that ?[y/N]: ' cautionConf
- 
- case $cautionConf in
-     [yY][eE][sS]|[yY])
-     TGTDEV=/dev/${drive[0]}
- break
- ;;
-     [nN][oO]|[nN])
- echo "Please Select a drive!"
- selectDrive
-        ;;
-     *)
- echo "Invalid input..."
- ;;
- esac
-done
-}
-
 ### Use Select Drive Function
 selectDrive
 
+TGTDEV=/dev/${drive[0]}
+
 while true
 do
-echo "you have selected the following drive [/dev/${drive[0]}]"
+echo -e "you have selected the following drive \e[31m[$TGTDEV]\e[0m"
+echo ""
+echo -e "\e[31mCaution This Will format [$TGTDEV] and create the following partitions:\e[0m"
+echo    "------------------------------------------------------------------------"
+echo ""
+echo "boot partition : [$TGTDEV'1']"
+echo "root partition : [$TGTDEV'1']"
+echo ""
 
     read -p 'Are you sure of this selection ?[y/N]: ' driveConf
  
  case $driveConf in
      [yY][eE][sS]|[yY])
-     TGTDEV=/dev/${drive[0]}
-     caution
  break
  ;;
      [nN][oO]|[nN])
